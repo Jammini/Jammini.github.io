@@ -1,0 +1,132 @@
+### String은 불변이다?
+
+
+
+의문이 들었다. 아래와 같은 코드가 가능하기에
+
+```java
+String str = "KJM";
+str = "jammini";
+```
+
+이처럼 변수는 언제든 값을 바꿀 수 있는 가변
+
+만약 변수에 값을 변경하지 못하게 하려면 final 키워드를 앞에 붙여줘야함.
+
+```java
+final String str = "KJM";
+str = "jammini";	// error!!
+```
+
+String이 불변이라는 소리는 무엇일까?
+
+중요한 포인트 **String은 기본 타입(Primitive Type)이 아닌 참조 타입(Reference Type)이라는 것.** 즉, String은 클래스다.
+
+
+
+Java에서 String 객체는 특별히 String constant pool에서 따로 관리가 된다.
+
+```java
+int num = 10;
+num = 20;
+
+String str = "abc";
+str = "def";
+```
+
+
+
+![image-20201028184809326](C:\Users\evens\AppData\Roaming\Typora\typora-user-images\image-20201028184809326.png)
+
+
+
+| 기본 타입(Primitive Type)                             | 참조 타입(Reference Type)                                    |
+| ----------------------------------------------------- | ------------------------------------------------------------ |
+| Stack 메모리에 값을 바로 저장                         | Stack 메모리에 직접 저장되는 것이 아니라 Heap 영역에 저장    |
+| 값을 변경 할 경우 변수가 갖고 있는 메모리에서 값 변경 | String은 Heap영역 중에서도 String constant pool이라는 곳에 메모리를 할당 받아 거기에 값을 저장 |
+| 가변성                                                | 불변성                                                       |
+
+
+
+### String Pool
+
+String은 특별한 아이
+
+String은 new 키워드와 생성자를 사용해 객체를 생성할 수 있음.
+
+생성자 없이 큰 따옴표(")를 통해서도 객체 생성할 수 있음.
+
+```java
+String s1 = "Cat";
+String s2 = "Dog";
+String s3 = new String("Cat");
+```
+
+![image-20201028192335432](C:\Users\evens\AppData\Roaming\Typora\typora-user-images\image-20201028192335432.png)
+
+s1 과 s2는 String pool의 메모리를 가르키고 있음.
+
+s3은 String pool이 아닌 일반 객체처럼 힙(Heap) 영역에 할당된 메모리를 가리킴.
+
+```java
+String s1 = "Cat";
+String s2 = "Cat";
+String s3 = new String("Cat");
+String s4 = new String("Cat");
+ 
+System.out.println(s1 == s2);  // true
+System.out.println(s1 == s3);  // false
+System.out.println(s3 == s4);  // false
+```
+
+
+
+### String Pool과 플라이웨이트(Flyweight) 패턴
+
+String Pool은 플라이웨이트 디자인 패턴을 잘 적용한 대표적인 사례
+
+Runtime에서 많은 양의 String 객체를 생성하게 되더라도 많은 양의 메모리공간을 절약
+
+
+
+## 가비지 콜렉터(Garbage Collector)
+
+**1.** 메모리 할당
+
+**2.** 사용 중인 메모리 인식
+
+**3.** 사용하지 않는 메모리인식
+
+```java
+String s1 = "Cat";
+s1 += "Dog";
+```
+
+"Cat" -> 가비지 콜렉터의 대상이 됨.
+
+#### Example 1 :
+
+```java
+Article article = null;
+for(int i=0; i<100; i++) {
+	article = new Article;
+}
+```
+
+#### Example 2:
+
+```java
+for(int i=0; i<100; i++) {
+	Article article = new Article;
+}
+```
+
+
+
+**참조 사이트**
+
+https://www.baeldung.com/java-string-pool
+
+https://readystory.tistory.com/140
+
+https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop
